@@ -59,11 +59,36 @@ class Token {
 
         template <typename... Ts>
         bool is_one_of(Type t1, Type t2, Ts... ks) const noexcept {
-            return is(k1) || is_one_of(k2, ks...); //Note the recursive call
+            return is(t1) || is_one_of(t2, ks...); //Note the recursive call
         }
 
         //Lexeme getter
         std::string_view get_lexeme() const noexcept { return lexeme; }
+    
+    private:
+        Type ttype{}; //Token type
+        std::string_view lexeme; //Lexeme (the actual string)
+
+
+};
+
+class Lexer {
+    public:
+        Lexer(const char* begin) noexcept : beg{begin} {}; //Constructor
+
+       
+    
+    private:
+        const char* beg = nullptr; //Pointer to a constant character (beginning of string)
+
+        //Forward declarations of critical methods
+        Token identifier() noexcept;
+        Token number() noexcept;
+        Token slash_or_comment() noexcept;
+        Token atom(Token::Type) noexcept;
+
+        char peek() const noexcept { return *beg; } //See the next character without moving pointer
+        char get() noexcept { return *beg++; } //Returns current char and moves to next one
 
         //Cheker functions
         bool is_space(char c) noexcept { //Noexcept doesn't throw exceptions, but this can be a performance boost in functions that are used often
@@ -167,10 +192,5 @@ class Token {
                     return false;
             }
         }
-    
-    private:
-        Type ttype{}; //Token type
-        std::string_view lexeme; //Lexeme (the actual string)
-
 
 };
