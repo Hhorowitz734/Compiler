@@ -85,7 +85,7 @@ class Lexer {
         //Forward declarations of critical methods
         Token identifier() noexcept;
         Token number() noexcept;
-        Token slash_or_comment() noexcept;
+        Token hash_or_comment() noexcept;
         Token atom(Token::Type) noexcept;
 
         char peek() const noexcept { return *beg; } //See the next character without moving pointer
@@ -295,9 +295,9 @@ Token Lexer::next() noexcept {
         case '*':
             return atom(Token::Type::Asterisk);
         case '/':
-            return slash_or_comment();
+            return atom(Token::Type::Slash);
         case '#':
-            return atom(Token::Type::Hash);
+            return hash_or_comment();
         case '.':
             return atom(Token::Type::Dot);
         case ',':
@@ -316,5 +316,41 @@ Token Lexer::next() noexcept {
             return atom(Token::Type::Unexpected); //Case that token is not any of others
     }
 
-
 }
+
+//Tokenizer mechanics
+Token Lexer::identifier() noexcept {
+    const char* start = beg; //Saves a pointer to the beginning
+    get(); //Gets next character 
+    while (is_identifier_char(peek())) get(); //Iterates while identifier is going
+    return Token(Token::Type::Identifier, start, beg); //Returns the identifier as a token
+}
+
+Token Lexer::number() noexcept {
+    const char* start = beg;
+    get();
+    while (is_digit(peek())) get();
+    return Token(Token::Type::Number, start, beg);
+}
+
+Token Lexer::hash_or_comment() noexcept{
+    const char* start = beg;
+    get();
+    if(peek() == '#'){
+        get();
+        start = beg;
+        while (peek() != '\0'){ //Waits for newline
+            if (get() == '\n') { 
+                return Token( //Returns a token that encompasses the whole comment with the exception of the '##'
+                    Token::Type::Comment, 
+                    start, 
+                    std::distance(start, beg) - 1
+                    );
+            }
+        }
+        return Token(Token::Type::Unexpected, beg, 1);
+    } else {
+        return Token(Token::Type::Hash, start, 1);
+    }
+}
+
