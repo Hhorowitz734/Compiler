@@ -1,5 +1,7 @@
-#include "lexer.h";
+#include "lexer.h"
 #include "token.h"
+
+#include <iostream>
 
 Lexer::Lexer(const char* begin) noexcept : beg{begin} {};
 

@@ -1,9 +1,10 @@
 #include "lexer.h"
 #include "token.h"
+#include "parser.h"
 #include <iostream>
 #include <iomanip>
 
-//g++ -std=c++17 main.cpp lexer2.cpp token.cpp -o main
+//g++ -std=c++17 main.cpp parser.cpp lexer.cpp token.cpp -o main
 
 int main() {
   auto code =
@@ -23,11 +24,6 @@ int main() {
       "var norm = function(u{:}) -> scalar { return sqrt(dot(u, u)); }\n"
       "<end>";
 
-  Lexer lex(code);
-  for (auto token = lex.next();
-       not token.is_one_of(Token::Type::End, Token::Type::Unexpected);
-       token = lex.next()) {
-        std::cout << std::setw(12) << token.get_type() << " |" << token.get_lexeme()
-              << "|\n";
-  }
+    Parser parser(code);
+    parser.parse();
 }
