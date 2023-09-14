@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <charconv> 
+//To implement efficient stringview to double
 
 
 //Default constructor
@@ -44,9 +46,77 @@ void Parser::consume(Token::Type expected_type) { //Compares token to expected t
 
 //Expression handling methods
 
-double Parser::expression() noexcept {
-    //Processes an expression by checking if it 
-    return 0.0;
+double Parser::expr() noexcept {
+    
+    double value = term();
+
+    while (curr_token.is_one_of(Token::Type::Plus, Token::Type::Minus)){
+        Token::Type op = curr_token.get_type();
+        advance();
+
+        double next_value = term();
+
+        if (op == Token::Type::Plus){
+            value += next_value;
+        } else if (op == Token::Type::Minus){
+            value -= next_value;
+        }
+    }
+    
+    return value;
+
+}
+
+double Parser::factor() {
+
+    if (curr_token.is(Token::Type::Number)){ //If token is a number, returns that number
+        double value = sv_to_double(curr_token.get_lexeme()); //stod takes a numeric value from a string
+        advance();
+        return value;
+    } else if (curr_token.is(Token::Type::LeftParen)){
+        advance();
+        double value = expr(); //Recursive call for expression inside parentheses
+        consume(Token::Type::RightParen);
+        return value;
+    } else {
+        throw std::runtime_error("Unexpected token in factor."); //I aim to create better error statements in the future
+    }
+
+
+}
+
+double Parser::term() noexcept {
+
+    double value = factor();
+
+    while(curr_token.is_one_of(Token::Type::Asterisk, Token::Type::Slash)){
+        Token::Type op = curr_token.get_type();
+        advance(); 
+        double next_value = factor(); //Gets the second number for multiplying/dividing
+
+        if (op == Token::Type::Asterisk){
+            value *= next_value;
+        } else if (op == Token::Type::Slash){
+            value /= next_value;
+        }
+    }
+
+    return value;
+
+}
+
+
+//Helper methods -------------
+
+double Parser::sv_to_double(std::string_view sv){
+    //Converts string view to double efficiently
+    char buffer[64];  // assuming max number length is < 64; adjust as needed
+    if(sv.size() >= sizeof(buffer)) {
+        throw std::runtime_error("Number too long");
+    }
+    std::copy(sv.begin(), sv.end(), buffer);
+    buffer[sv.size()] = '\0';
+    return strtod(buffer, nullptr);
 }
 
 
@@ -54,17 +124,7 @@ double Parser::expression() noexcept {
 //Testing methods -------------
 
 void Parser::print_token(const Token& token) noexcept { 
-
-    // TODO: Tries to match next token with expected token type
-    // Throws an error if that doesn't work
-
     std::cout << std::setw(12) << token.get_type() << " |" << token.get_lexeme() << "|\n";
-    // Here, you'll have logic to handle each type of token and build your AST or perform other parsing tasks.
-}
-
-double Parser::expression() noexcept {
-    //Processes an expression by checking if it 
-    return 0.0;
 }
 
 
@@ -75,9 +135,15 @@ void Parser::parse() noexcept {
 
     while(!curr_token.is_one_of(Token::Type::End, Token::Type::Unexpected)){ //Iterates until the end or until an unexpected character
 
-        print_token(curr_token);
-        advance();
-
+        
+        if (curr_token.is(Token::Type::Number) //Testing our arithmetic processing
+           || curr_token.is(Token::Type::LeftParen) 
+           || curr_token.is(Token::Type::Minus)) {
+            double result = expr();
+            std::cout << "Result: " << result << std::endl;
+            break;
+        }
+        
     }
 
 }

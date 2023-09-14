@@ -30,8 +30,12 @@ class Parser {
         void print_token(const Token& token) noexcept;
 
         //Expression management
-        double expression() noexcept;
+        double expr() noexcept;
+        double factor();
+        double term() noexcept;
 
+        //Helper methods
+        double sv_to_double(std::string_view stringview);
 
 
 

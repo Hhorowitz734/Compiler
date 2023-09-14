@@ -21,7 +21,11 @@ int main() {
       "}\n"
       "var norm = function(u{:}) -> scalar { return sqrt(dot(u, u)); }\n"
       "<end>";
+  
+  auto arithmetic_test = 
+    "((3 + 4) * 3) / (3)"
+    "<end>";
 
-    Parser parser(code);
+    Parser parser(arithmetic_test);
     parser.parse();
 }
