@@ -14,8 +14,9 @@ Parser::Parser(const std::string& code) noexcept
 
 
 
-//Moves curr_token pointer to the next token
-void Parser::advance() noexcept {
+//Looking forwards methods -------------
+
+void Parser::advance() noexcept { //Advances to the next token without checking type
     if (has_peeked){
         curr_token = next_token;
         has_peeked = false;
@@ -24,13 +25,33 @@ void Parser::advance() noexcept {
     }
 }
 
-Token Parser::peek() noexcept {
+Token Parser::peek() noexcept { //Returns the next token without advancing to it
     if (!has_peeked){
         next_token = lexer.next();
         has_peeked = true;
     } 
     return next_token;
 }
+
+void Parser::consume(Token::Type expected_type) { //Compares token to expected type, then advances
+    if (!curr_token.is(expected_type)){ //Throws error if type is unexpected
+        throw std::runtime_error("Unexpected Token.");
+    }
+    advance();
+}
+
+
+
+//Expression handling methods
+
+double Parser::expression() noexcept {
+    //Processes an expression by checking if it 
+    return 0.0;
+}
+
+
+
+//Testing methods -------------
 
 void Parser::print_token(const Token& token) noexcept { 
 
@@ -46,17 +67,9 @@ double Parser::expression() noexcept {
     return 0.0;
 }
 
-void Parser::consume(Token::Type expected_type) {
 
-    //Compares token to expected type, then advances
 
-    if (!curr_token.is(expected_type)){ //Throws error if type is unexpected
-        throw std::runtime_error("Unexpected Token.");
-    }
-
-    advance();
-     
-}
+//Main parser method -------------
 
 void Parser::parse() noexcept {
 
