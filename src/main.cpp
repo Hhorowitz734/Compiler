@@ -1,8 +1,6 @@
 #include "lexer.h"
 #include "token.h"
 #include "parser.h"
-#include <iostream>
-#include <iomanip>
 
 //g++ -std=c++17 main.cpp parser.cpp lexer.cpp token.cpp -o main
 

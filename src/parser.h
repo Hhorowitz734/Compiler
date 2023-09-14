@@ -9,19 +9,29 @@ class Parser {
         Lexer lexer;
         Token curr_token;
 
+        //To allow the peek function to work
+        bool has_peeked = false;
+        Token next_token;
+
     public:
         
         //Default constructor
         Parser(const std::string& code) noexcept;
 
-        //Advance
+        //Advance + Consume + Peek methods
         void advance() noexcept;
-        
+        void consume(Token::Type expected_type);
+        Token peek() noexcept;
+
         //Parse
         void parse() noexcept;
 
-        //Process token
-        void process_token(const Token& token) noexcept;
+        //Prints token
+        void print_token(const Token& token) noexcept;
+
+        //Expression management
+        double expression() noexcept;
+
 
 
 

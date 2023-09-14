@@ -9,23 +9,60 @@
 Parser::Parser(const std::string& code) noexcept 
     : source_code(code),
     lexer(source_code.c_str()),
-      curr_token(lexer.next()) {} //Sets the current token
+      curr_token(lexer.next()), //Sets the current token
+      next_token(Token::Type::Unexpected) {} //Temporarily sets next token with unexpected type
+
+
 
 //Moves curr_token pointer to the next token
 void Parser::advance() noexcept {
-    curr_token = lexer.next();
+    if (has_peeked){
+        curr_token = next_token;
+        has_peeked = false;
+    } else {
+        curr_token = lexer.next();
+    }
 }
 
-void Parser::process_token(const Token& token) noexcept {
+Token Parser::peek() noexcept {
+    if (!has_peeked){
+        next_token = lexer.next();
+        has_peeked = true;
+    } 
+    return next_token;
+}
+
+void Parser::print_token(const Token& token) noexcept { 
+
+    // TODO: Tries to match next token with expected token type
+    // Throws an error if that doesn't work
+
     std::cout << std::setw(12) << token.get_type() << " |" << token.get_lexeme() << "|\n";
     // Here, you'll have logic to handle each type of token and build your AST or perform other parsing tasks.
+}
+
+double Parser::expression() noexcept {
+    //Processes an expression by checking if it 
+    return 0.0;
+}
+
+void Parser::consume(Token::Type expected_type) {
+
+    //Compares token to expected type, then advances
+
+    if (!curr_token.is(expected_type)){ //Throws error if type is unexpected
+        throw std::runtime_error("Unexpected Token.");
+    }
+
+    advance();
+     
 }
 
 void Parser::parse() noexcept {
 
     while(!curr_token.is_one_of(Token::Type::End, Token::Type::Unexpected)){ //Iterates until the end or until an unexpected character
 
-        process_token(curr_token);
+        print_token(curr_token);
         advance();
 
     }
