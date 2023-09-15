@@ -23,7 +23,7 @@ int main() {
       "<end>";
   
   auto arithmetic_test = 
-    "((3 + 4) * 3) / (3)"
+    "(5 * (3 / 2)) + 1"
     "<end>";
 
     Parser parser(arithmetic_test);

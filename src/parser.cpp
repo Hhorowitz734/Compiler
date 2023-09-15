@@ -127,6 +127,19 @@ void Parser::print_token(const Token& token) noexcept {
     std::cout << std::setw(12) << token.get_type() << " |" << token.get_lexeme() << "|\n";
 }
 
+void Parser::parse_arithmetic() noexcept { //Test case to parse arithmetic expressions
+
+    //Can handle expressions such as "(5 * (3 / 2)) + 1" or "(3 + 3) * (5 - 1)"
+
+    if (curr_token.is(Token::Type::Number) //Testing our arithmetic processing
+        || curr_token.is(Token::Type::LeftParen) 
+        || curr_token.is(Token::Type::Minus)) {
+        double result = expr();
+        std::cout << "Result: " << result << std::endl;
+    }
+
+}
+
 
 
 //Main parser method -------------

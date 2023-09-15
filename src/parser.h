@@ -26,8 +26,9 @@ class Parser {
         //Parse
         void parse() noexcept;
 
-        //Prints token
+        //Testing methods
         void print_token(const Token& token) noexcept;
+        void parse_arithmetic() noexcept;
 
         //Expression management
         double expr() noexcept;
