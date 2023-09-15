@@ -6,18 +6,25 @@
 class TreeParser {
     //Parser an AST Tree defined based on the given nodes
     private:
+        //Properties
+        std::string source_code;
         Lexer lexer;
         Token curr_token;
         Token next_token;
-        std::string source_code;
+        bool has_peeked = false;
         
-        Token peek() const;
-        Token consume(Token::Type t);
+        //Move forward methods
+        void advance() noexcept;
+        Token peek() noexcept;
+        void consume(Token::Type t);
 
-        std::unique_ptr<Node> expression();
+        //Recursive descent parsing
         std::unique_ptr<Node> plus_minus();
         std::unique_ptr<Node> mult_div();
         std::unique_ptr<Node> primary(); //Handles literals and parentheses
+
+        //Helper methods
+        double sv_to_double(std::string_view sv);
 
     public:
         //Default constructor -> Initializes vector with source code
@@ -27,5 +34,7 @@ class TreeParser {
             curr_token(lexer.next()),
             next_token(Token::Type::Unexpected) {}; //next_token should never be used as Token::Type::Unexpected
 
+        //Main method
+        std::unique_ptr<Node> parse();
 
 };

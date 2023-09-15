@@ -1,4 +1,4 @@
-#include "token.h"
+#include "../token.h"
 #include "node.h"
 
 class LiteralNode : public Node {
@@ -28,7 +28,7 @@ class BinaryOpNode : public Node {
         Token::Type opr; //Operator
     
     public:
-        BinaryOpNode::BinaryOpNode(Token::Type op, std::unique_ptr<Node> l, std::unique_ptr<Node> r)
+        BinaryOpNode(Token::Type op, std::unique_ptr<Node> l, std::unique_ptr<Node> r)
             : opr(op), left(std::move(l)), right(std::move(r)) {};
 
 

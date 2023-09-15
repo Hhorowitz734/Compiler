@@ -1,8 +1,12 @@
 #include "lexer.h"
 #include "token.h"
 #include "parser.h"
+#include "ast_nodes/tree_parser.h"
+
 
 //g++ -std=c++17 main.cpp parser.cpp lexer.cpp token.cpp -o main
+//g++ -std=c++17 main.cpp ast_nodes/tree_parser.cpp lexer.cpp token.cpp -o main
+
 
 int main() {
   auto code =
@@ -23,9 +27,9 @@ int main() {
       "<end>";
   
   auto arithmetic_test = 
-    "((5 / 2) * (3 / 2)) - 1"
+    "(3 + 3)"
     "<end>";
 
-    Parser parser(arithmetic_test);
+    TreeParser parser(arithmetic_test);
     parser.parse();
 }
