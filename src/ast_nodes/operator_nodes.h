@@ -9,9 +9,12 @@ class LiteralNode : public Node {
 
     public:
         //Constructors for each of the three allowed types
-        LiteralNode(int num) : val(num) {};
-        LiteralNode(double num) : val(num) {};
-        LiteralNode(long num) : val(num) {};
+        LiteralNode(int num) 
+            : Node(Node_Type::Literal), val(num) {};
+        LiteralNode(double num) 
+            : Node(Node_Type::Literal), val(num) {};
+        LiteralNode(long num) 
+            : Node(Node_Type::Literal), val(num) {};
 
         //Infers type as we don't know which one will be used
         const auto& get_value() const { return val; }
@@ -29,7 +32,7 @@ class BinaryOpNode : public Node {
     
     public:
         BinaryOpNode(Token::Type op, std::unique_ptr<Node> l, std::unique_ptr<Node> r)
-            : opr(op), left(std::move(l)), right(std::move(r)) {};
+            : Node(Node_Type::BinaryOperator), opr(op), left(std::move(l)), right(std::move(r)) {};
 
 
 
@@ -50,6 +53,6 @@ class ComparisonNode : public Node {
     public:
 
         ComparisonNode(Token::Type op, std::unique_ptr<Node> l, std::unique_ptr<Node> r)
-        : opr(op), left(std::move(l)), right(std::move(r)) {};
+        : Node(Node_Type::Comparison), opr(op), left(std::move(l)), right(std::move(r)) {};
 
 };

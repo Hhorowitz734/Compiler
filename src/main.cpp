@@ -5,7 +5,7 @@
 
 
 //g++ -std=c++17 main.cpp parser.cpp lexer.cpp token.cpp -o main
-//g++ -std=c++17 main.cpp ast_nodes/tree_parser.cpp lexer.cpp token.cpp -o main
+//g++ -std=c++17 main.cpp ast_nodes/tree_parser.cpp ast_nodes/node.cpp lexer.cpp token.cpp -o main
 
 
 int main() {
@@ -27,7 +27,7 @@ int main() {
       "<end>";
   
   auto arithmetic_test = 
-    "(3 + 3)"
+    "(3 + 3) / (5 / (7 + 2))"
     "<end>";
 
     TreeParser parser(arithmetic_test);

@@ -1,7 +1,7 @@
 #include "tree_parser.h"
+#include "node.h"
 #include "../token.h"
 #include "../lexer.h"
-#include "node.h"
 
 #include <iostream> //TEST
 
@@ -128,13 +128,8 @@ double TreeParser::sv_to_double(std::string_view sv){
 std::unique_ptr<Node> TreeParser::parse(){
 
     std::unique_ptr<Node> result = plus_minus();
-    BinaryOpNode* binaryOpNode = dynamic_cast<BinaryOpNode*>(result.get());
-    if(binaryOpNode){
-        std::cout << binaryOpNode->get_operator() << '\n';
-        const LiteralNode* literalNode = dynamic_cast<const LiteralNode*>(binaryOpNode->get_right()); //FINSIH THIS
-        std::visit([](auto&& arg) {
-            std::cout << arg << '\n'; 
-        }, literalNode->get_value());
+    if(result->is(Node::Node_Type::BinaryOperator)){
+        std::cout << "Head node in binary operator\n";
     }
     return result;
 
