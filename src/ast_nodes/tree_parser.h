@@ -3,7 +3,6 @@
 #include "../lexer.h"
 #include "operator_nodes.h"
 
-
 class TreeParser {
     //Parser an AST Tree defined based on the given nodes
     private:

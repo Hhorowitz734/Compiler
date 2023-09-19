@@ -13,8 +13,7 @@ void Visualizer::display(Node* node, int indent = 0, std::string prefix = "") no
         std::cout << continuation_prefix;
     }
     
-    std::cout << prefix << "node!" << '\n';
-    std::cout << node->get_right()->has_children() << '\n'; //This throws a segfault
+    std::cout << prefix << "node!" << '\n'; //the node doesn't have children because the TreeParser isnt connecting the nodes
 
     if (node->has_children()){
         display(node->left, indent + 1, child_prefix);

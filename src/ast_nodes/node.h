@@ -45,3 +45,6 @@ class Node {
         explicit Node(Node_Type type) : ntype(type) {}; //Constructor to set Node type
 };
 
+
+//Function to print the possible_value_types type
+std::ostream& operator<<(std::ostream& os, const Node::possible_value_types& value);

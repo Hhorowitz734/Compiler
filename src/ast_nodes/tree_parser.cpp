@@ -86,21 +86,36 @@ std::unique_ptr<Node> TreeParser::primary() {
 
     std::cout << "primary" << '\n'; //TEST
 
-    Token next_type = peek(); //We are checking out the next token
+    Token next_token = peek(); //We are checking out the next token
     
-    switch(next_type.get_type()){ //Switch statement to check the type of the next token
+    switch(next_token.get_type()){ //Switch statement to check the type of the next token
 
         case Token::Type::Number:
+
+            return std::make_unique<LiteralNode>(sv_to_double(next_token.get_lexeme()));
             advance();
-            return std::make_unique<LiteralNode>(sv_to_double(next_type.get_lexeme()));
+        
         case Token::Type::LeftParen:
+
             consume(Token::Type::LeftParen);
+
             { //Defined a block scope to prevent issues with expr_result
-            std::unique_ptr<BinaryOpNode> expr_result = std::unique_ptr<BinaryOpNode>(static_cast<BinaryOpNode*>(plus_minus().release()));
+
+            std::unique_ptr<Node> temp_result = plus_minus(); // Catch the result in a unique_ptr first
+            BinaryOpNode* bin_op_node = dynamic_cast<BinaryOpNode*>(temp_result.get());
+            
+            if (!bin_op_node) { //Checks the case that expr_result is nullptr (wasnt created)
+                std::runtime_error("Expected binary operator node.");
+            }
+
+            std::unique_ptr<BinaryOpNode> expr_result = std::unique_ptr<BinaryOpNode>(bin_op_node); // Transfer ownership
+            
             advance();
             return expr_result;
             }
+        
         default:
+
             throw std::runtime_error("Unexpected token in factor.");
     };
 

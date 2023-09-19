@@ -34,3 +34,11 @@ bool Node::has_children() const noexcept {
 //Dummy functions
 const Node* Node::get_left() const { return left; }
 const Node* Node::get_right() const { return right; }
+
+//Allows the possible_value_types type to be printed
+std::ostream& operator<<(std::ostream& os, const Node::possible_value_types& value) {
+    std::visit([&os](const auto& val) {
+        os << val;
+    }, value);
+    return os;
+}

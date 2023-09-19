@@ -1,5 +1,6 @@
 #include "../token.h"
 #include "node.h"
+#include <iostream> //TEST
 #pragma once
 
 class LiteralNode : public Node {
@@ -7,6 +8,7 @@ class LiteralNode : public Node {
     private:
         //Sets up a value
         Node::possible_value_types val;
+
         
 
     public:
@@ -35,7 +37,16 @@ class BinaryOpNode : public Node {
     public:
         BinaryOpNode(Token::Type op, std::unique_ptr<Node> l, std::unique_ptr<Node> r)
             : Node(Node_Type::BinaryOperator), opr(op), left(std::move(l)), right(std::move(r)) 
-            { set_display_value("Opr [Fill later]"); }
+            { set_display_value("Opr [Fill later]");
+            std::cout << l->get_display_value(); //TEST 
+            /* ok so heres what im trying to do:
+               1) print the l and r children in the constructor
+                  so that this runs when a BinaryOpNode is created from TreeParser
+               2) To do that, I need to fix the possible_value_types tihng in node to make it printable
+                   Try to do that with a to_string custom function for the type if possible but if not then fuck
+               3) Make sure the nodes are being linked togehter properly
+            */
+             } 
 
 
 
