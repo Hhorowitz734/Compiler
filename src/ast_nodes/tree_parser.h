@@ -1,3 +1,4 @@
+#pragma once
 #include "../token.h"
 #include "../lexer.h"
 #include "operator_nodes.h"

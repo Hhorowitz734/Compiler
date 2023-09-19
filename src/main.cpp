@@ -2,10 +2,11 @@
 #include "token.h"
 #include "parser.h"
 #include "ast_nodes/tree_parser.h"
+#include "ast_nodes/visualizer.h"
 
 
 //g++ -std=c++17 main.cpp parser.cpp lexer.cpp token.cpp -o main
-//g++ -std=c++17 main.cpp ast_nodes/tree_parser.cpp ast_nodes/node.cpp lexer.cpp token.cpp -o main
+//g++ -std=c++17 main.cpp ast_nodes/tree_parser.cpp ast_nodes/node.cpp ast_nodes/visualizer.cpp lexer.cpp token.cpp -o main
 
 
 int main() {
@@ -31,5 +32,7 @@ int main() {
     "<end>";
 
     TreeParser parser(arithmetic_test);
-    parser.parse();
+    std::unique_ptr<Node> root = parser.parse();
+    Visualizer* vis = new Visualizer(root.get());
+    vis -> display(root.get(), 0, "");
 }
